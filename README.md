@@ -36,7 +36,9 @@ To use with `Desktop APP`, such as Claude, VSCode, Cline, Cherry Studio, and so 
       "command": "npx",
       "args": [
         "-y",
-        "mcp-echarts"
+        "mcp-echarts",
+        "--transport",
+        "stdio"
       ]
     }
   }
@@ -54,7 +56,9 @@ On Window system:
         "/c",
         "npx",
         "-y",
-        "mcp-echarts"
+        "mcp-echarts",
+        "--transport",
+        "stdio"
       ]
     }
   }
@@ -64,7 +68,7 @@ On Window system:
 Also, you can use it on [modelscope](https://www.modelscope.cn/mcp/servers/hustcc/MCP-ECharts), [glama.ai](https://glama.ai/mcp/servers/@hustcc/mcp-echarts), [skillselion.com](https://skillselion.com/mcp/tool/io.github.hustcc/mcp-echarts) or others with HTTP, SSE Protocol.
 
 
-## 🚰 Run with SSE or Streamable transport
+## 🚰 Run with Streamable HTTP or SSE transport
 
 Install the package globally.
 
@@ -72,19 +76,37 @@ Install the package globally.
 npm install -g mcp-echarts
 ```
 
-Run the server with your preferred transport option:
+Run the server with Streamable HTTP on port 8000 by default:
 
 ```bash
-# For SSE transport (default endpoint: /sse)
-mcp-echarts -t sse
+mcp-echarts
+```
 
-# For Streamable transport with custom endpoint
-mcp-echarts -t streamable
+The MCP endpoint is `http://localhost:8000/mcp` and the health check is
+`http://localhost:8000/health`. To use another transport or endpoint:
+
+```bash
+mcp-echarts -t sse
+mcp-echarts -t streamable -p 8001 -e /charts
 ```
 
 Then you can access the server at:
-- SSE transport: `http://localhost:3033/sse`
-- Streamable transport: `http://localhost:3033/mcp`
+- SSE transport: `http://localhost:8000/sse`
+- Custom Streamable HTTP endpoint: `http://localhost:8001/charts`
+
+To run the Docker image locally, publish port 8000:
+
+```bash
+docker run --rm -p 8000:8000 IMAGE_REPOSITORY:IMAGE_TAG
+```
+
+To build and push an image to Docker Hub, provide the token through stdin:
+
+```bash
+printf '%s\n' "$DOCKER_HUB_TOKEN" | ./docker-build.sh USERNAME/mcp-echarts latest USERNAME
+```
+
+Set `PLATFORMS` to override the default `linux/amd64` build platform.
 
 
 ## 🎮 CLI Options
@@ -95,8 +117,8 @@ You can also use the following CLI options when running the MCP server. Command 
 MCP ECharts CLI
 
 Options:
-  --transport, -t  Specify the transport protocol: "stdio", "sse", or "streamable" (default: "stdio")
-  --port, -p       Specify the port for SSE or streamable transport (default: 3033)
+  --transport, -t  Specify the transport protocol: "stdio", "sse", or "streamable" (default: "streamable")
+  --port, -p       Specify the port for SSE or streamable transport (default: 8000)
   --endpoint, -e   Specify the endpoint for the transport:
                     - For SSE: default is "/sse"
                     - For streamable: default is "/mcp"

@@ -55,6 +55,7 @@ export async function renderECharts(
   });
 
   echarts.setPlatformAPI({
+    createCanvas: () => createCanvas(1, 1) as unknown as HTMLCanvasElement,
     loadImage(src, onload, onerror) {
       const img = new Image();
       img.onload = onload.bind(img);

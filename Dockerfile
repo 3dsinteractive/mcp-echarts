@@ -14,5 +14,6 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Command will be provided by smithery.yaml
+EXPOSE 8000
+
 CMD ["node", "build/index.js"]

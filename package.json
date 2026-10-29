@@ -7,7 +7,7 @@
     "test": "vitest",
     "prebuild": "rm -rf build/*",
     "build": "tsc && tsc-alias -p tsconfig.json",
-    "start": "npm run build && npx @modelcontextprotocol/inspector node build/index.js",
+    "start": "npm run build && node build/index.js",
     "prepare": "husky && npm run build",
     "prepublishOnly": "npm run build"
   },

@@ -40,12 +40,12 @@ const { values } = parseArgs({
     transport: {
       type: "string",
       short: "t",
-      default: "stdio",
+      default: "streamable",
     },
     port: {
       type: "string",
       short: "p",
-      default: "3033",
+      default: "8000",
     },
     endpoint: {
       type: "string",
@@ -65,8 +65,8 @@ if (values.help) {
 MCP ECharts CLI
 
 Options:
-  --transport, -t  Specify the transport protocol: "stdio", "sse", or "streamable" (default: "stdio")
-  --port, -p       Specify the port for SSE or streamable transport (default: 3033)
+  --transport, -t  Specify the transport protocol: "stdio", "sse", or "streamable" (default: "streamable")
+  --port, -p       Specify the port for SSE or streamable transport (default: 8000)
   --endpoint, -e   Specify the endpoint for the transport:
                    - For SSE: default is "/sse"
                    - For streamable: default is "/mcp"
@@ -77,7 +77,7 @@ Options:
 
 // Main function to start the server
 async function main(): Promise<void> {
-  const transport = values.transport?.toLowerCase() || "stdio";
+  const transport = values.transport?.toLowerCase() || "streamable";
   const port = Number.parseInt(values.port as string, 10);
 
   if (transport === "sse") {
